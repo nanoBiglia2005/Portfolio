@@ -6,7 +6,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #95d8ec;
   }
 }
 
@@ -25,7 +25,7 @@ body {
   display: flex;
   flex-direction: column;
   color: var(--foreground);
-  background: var(--background);
+  background: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -47,3 +47,12 @@ a {
     color-scheme: dark;
   }
 }
+
+header {
+  background-color: #a2e7f3;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+

@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -25,7 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   color: var(--foreground);
-  background-color: #5977d8;
+  background-color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -67,21 +69,16 @@ main {
 
 #about-me-section{
   display: none;
-  padding: 7rem;
 }
 
 #proyects-section{
   display: none;
-  padding: 7rem;
   gap: 13rem;
   justify-content: space-around;
 }
 
 #about-me-section.is-open, #proyects-section.is-open {
   display: flex;
-  height: fit-content;
-  flex-direction: column;
-  align-items: center;
 }
 
 #music-article, #portfolio-article{
@@ -89,6 +86,32 @@ main {
 }
 
 #music-article.is-open, #portfolio-article.is-open{
+  display: flex;
+}
+
+#contact-section{
+  padding: 13rem 5rem; 
+  display: none; 
+  align-items: center; 
+  flex-direction: column;
+}
+
+#contact-section.is-open{
+  display: flex;
+}
+
+#menu-bar{
+  display: none; 
+  flex-direction: column; 
+  position: fixed; 
+  z-index: 10; 
+  background-color:white; 
+  padding: 20px 15px; 
+  gap: 15px;
+  margin: 40px 0 0 40px;
+}
+
+#menu-bar.is-open{
   display: flex;
 }
 

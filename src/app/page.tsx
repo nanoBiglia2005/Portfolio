@@ -239,12 +239,6 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });
   const [currentStepIndex, moveStep] = useState(0);
   const [fontIndex, setFontIndex] = useState(0);
-  const [highlightSpanUsesStack, setHighlightSpanUsesStack] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -256,16 +250,6 @@ export default function Home() {
         return next;
       });
     }, 100);
-
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setHighlightSpanUsesStack((prev) =>
-        prev.map((usesStack) => (Math.random() < 0.8 ? !usesStack : usesStack)),
-      );
-    }, 2000);
 
     return () => clearInterval(id);
   }, []);
@@ -284,8 +268,6 @@ export default function Home() {
   const spotlightBackground = useMemo(() => {
     return `radial-gradient(circle ${SPOT_RADIUS_PX}px at ${mousePosition.x}px ${mousePosition.y}px, ${SPOT_COLOR} 0 ${SPOT_RADIUS_PX}px, ${BASE_COLOR} ${SPOT_RADIUS_PX + 1}px)`;
   }, [mousePosition.x, mousePosition.y]);
-  const getHighlightSpanFont = (index: number) =>
-    highlightSpanUsesStack[index] ? stackSansText.className : amarante.className;
 
   useEffect(() => {
     const currentStep = document.querySelector<HTMLElement>(`[data-step-id="${currentStepIndex}"]`)
@@ -328,25 +310,25 @@ export default function Home() {
       </main>
       <section
         id="about-me-section"
-        className= {`flex-col items-center ${currentStepIndex > 0 ? "is-open" : ""} gap-y-20 h-screen !pt-2 !px-2`}
+        className= {`flex-col items-center ${currentStepIndex > 0 ? "is-open" : ""} h-screen !pt-2 !px-2`}
         data-step-id='1'
 
         onClick={() => {
           if (currentStepIndex < 2) moveStep(2);
         }}
       >
-        <div className="flex flex-col h-full w-full bg-white rounded-t-xl shadow-2xl !py-2 justify-around">
-          <div className="flex h-fit items-end !mx-5">
-            <h4 className={`text-8xl h-fit text-black border-be-2 border-black ${stackSansText.className}`}><span className="text-9xl">D</span>es<span className={getHighlightSpanFont(0)}>arro</span>llo <span className={getHighlightSpanFont(1)}>Web</span> Ful<span className={getHighlightSpanFont(2)}>lSt</span>a<span className={getHighlightSpanFont(3)}>ck</span></h4>
+        <div className="flex flex-col h-full w-full bg-white rounded-t-xl shadow-2xl !py-2 justify-start gap-5">
+          <div className="group flex h-fit items-end !mx-7 hover:cursor-pointer !my-6">
+            <h4 className={`text-8xl h-fit w-300 text-black border-be-2 border-black ${stackSansText.className} group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl italic">D</span>esa<span className="italic">rro</span>llo <span className="italic">Web</span> Full<span className="italic">St</span>ack</h4>
           </div>
-          <div className="flex flex-row-reverse h-fit items-end !mx-5">
-            <h4 className={`text-8xl h-fit text-black border-be-2 border-black ${stackSansText.className}`}><span className="text-9xl">A</span>nálisis de Datos</h4>
+          <div className="group flex h-fit items-end !mx-7 justify-end hover:cursor-pointer !mt-18">
+            <h4 className={`text-8xl !me-20 h-fit w-206 text-black border-be-2 border-black ${stackSansText.className} text-right group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl">A</span>nálisis de Datos</h4>
           </div>
-          <div className="flex h-fit items-end !mx-5">
-            <h4 className={`text-8xl h-fit text-black border-be-2 border-black ${stackSansText.className}`}><span className="text-9xl">B</span>ases de Datos</h4>
+          <div className="group flex h-fit items-end !mx-7 hover:cursor-pointer justify-start !mt-10">
+            <h4 className={`text-8xl !ms-30 h-fit w-188 text-black border-be-2 border-black ${stackSansText.className} group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl">B</span>ases de Datos</h4>
           </div>
-          <div className="flex flex-row-reverse h-fit items-end !mx-5">
-            <h4 className={`text-8xl h-fit text-black border-be-2 border-black ${stackSansText.className}`}><span className="text-9xl">O</span>tros</h4>
+          <div className="group flex h-fit items-end !mx-7 justify-end hover:cursor-pointer !mt-6">
+            <h4 className={`text-8xl !me-50 h-fit w-73 text-black border-be-2 border-black ${stackSansText.className} text-right group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl">O</span>tros</h4>
           </div>
         </div>
       </section>

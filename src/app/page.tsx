@@ -324,8 +324,9 @@ export default function Home() {
         }}
         style={{ background: spotlightBackground }}
         data-step-id='0'
+        className="flex item-center justify-center"
       >
-        <h1 className={`${fonts[fontIndex]} text-center text-9xl text-white select-none h-50`}>
+        <h1 className={`${fonts[fontIndex]} text-center sm:text-9xl text-5xl text-white select-none`}>
             {" "}
             Stefano Biglia{" "}
         </h1>
@@ -338,31 +339,52 @@ export default function Home() {
           if (currentStepIndex < 2) moveStep(2);
         }}*/
       >
-        <div className="flex flex-row h-full w-full bg-white rounded-t-xl shadow-2xl !py-5 !px-15 select-none">
+        <div className="flex flex-col-reverse md:flex-row h-full w-full bg-white rounded-t-xl shadow-2xl !py-5 !px-15 select-none">
           <div className="flex flex-col justify-center w-full">
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
-            <h4 onClick= {() => {setActiveH4( activeH4 === 'fullstack-h4' ? null : 'fullstack-h4')}
-          }className={`${activeH4 === 'fullstack-h4' ? 'text-9xl !mb-7' : 'text-8xl'} h-fit !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}
-          >desarrollo fullstack</h4>
-            <img src={"images/html.png"} className={`${activeH4 === 'fullstack-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
-            </div>  
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
-            <h4 onClick= {() => {setActiveH4( activeH4 === 'data-h4' ? null : 'data-h4')}
-          }className={`${activeH4 === 'data-h4' ? 'text-9xl !mb-7' : 'text-8xl'} !py-10 overflow-y-hidden h-fit w-fit text-black hover:cursor-pointer ${neueHaasBlack.className} transition-all duration-400 ease-out`}>análisis de datos</h4>
-            <img src={"images/python.png"} className={`${activeH4 === 'data-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
-            </div>
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
-            <h4 onClick= {() => {setActiveH4( activeH4 === 'database-h4' ? null : 'database-h4')}
-          }className={`${activeH4 === 'database-h4' ? 'text-9xl !mb-7' : 'text-8xl'} !py-10 overflow-y-hidden w-fit text-black hover:cursor-pointer ${neueHaasBlack.className} transition-all duration-400 ease-out`}>base de datos</h4>
-            <img src={"images/oracle.png"} className={`${activeH4 === 'database-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
-            </div>
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
-            <h4 onClick= {() => {setActiveH4( activeH4 === 'others-h4' ? null : 'others-h4')}
-          }className={`${activeH4 === 'others-h4' ? 'text-9xl !mb-7' : 'text-8xl'} !py-10 overflow-y-hidden w-fit text-black hover:cursor-pointer ${neueHaasBlack.className} transition-all duration-400 ease-out`}>otros</h4>
-            <img src={"images/amazon.png"} className={`${activeH4 === 'others-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
-            </div>     
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
+            onClick= {() => {setActiveH4( activeH4 === 'fullstack-h4' ? null : 'fullstack-h4')}}>
+            <h4 className={`${activeH4 === 'fullstack-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}
+          >desarrollo fullstack.</h4>
+          <div className="flex w-full justify-end">
+            <img src={"images/html.png"} alt='html' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/javascript.png"} alt='javascript' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/css.png"} alt='css' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/php.png"} alt='php' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-10 sm:h-7 h-4 2xl:!mt-6 sm:!mt-4 !mt-3' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/c.png"} alt='c' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/c++.png"} alt='c++' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/c sharp.png"} alt='c sharp' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/next.png"} alt='next' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
           </div>
-          <div className="w-[40%] flex flex-col justify-center items-center">
+            </div>  
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
+            onClick= {() => {setActiveH4( activeH4 === 'data-h4' ? null : 'data-h4')}}>
+            <h4 className={`${activeH4 === 'data-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>análisis de datos.</h4>
+            <div className="flex">
+            <img src={"images/python.png"} alt='python' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/excel.png"} alt='excel' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/power bi.png"} alt='power bi' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            </div>
+            </div>
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
+            onClick= {() => {setActiveH4( activeH4 === 'database-h4' ? null : 'database-h4')}}>
+            <h4 className={`${activeH4 === 'database-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>base de datos.</h4>
+            <div className="flex">
+            <img src={"images/oracle.png"} alt='oracle' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/mysql.png"} alt='mysql' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/postgresql.webp"} alt='postgresql' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            </div>
+            </div>
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
+            onClick= {() => {setActiveH4( activeH4 === 'others-h4' ? null : 'others-h4')}}>
+            <h4 className={`${activeH4 === 'others-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>otros</h4>
+            <div className="flex">
+            <img src={"images/amazon.png"} alt='amazon' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 sm:h-8 h-4 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/jira.png"} alt='jira' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 sm:h-8 h-4 !my-2' : ''} !ml-2 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/confluence.webp"} alt='confluence' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 sm:h-8 h-4 !my-2' : ''} !ml-4 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            </div>    
+            </div> 
+          </div>
+          <div className="w-[60%] flex flex-col justify-center items-center">
             <div className="h-60 w-40 bg-blue-500">
 
             </div>

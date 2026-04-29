@@ -1,8 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { act, useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable} from "next/font/google";
+import localFont from "next/font/local";
+import { Roboto, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
+
+const neueHaasBlack = localFont({
+  src: [
+    { path: "../../public/fonts/NeueHaasDisplayBlack.woff2", weight: "400", style: "normal"},
+  ],
+  variable: "--font-neueHass-black",
+});
+
+const neueHaasBold = localFont({
+  src: [
+    { path: "../../public/fonts/NeueHaasDisplayBold.woff2", weight: "400", style: "normal"},
+  ],
+  variable: "--font-neueHass-bold",
+});
+
+const roboto = Roboto({
+  weight: "800",
+  style: "normal",
+  variable: "--font-roboto",
+})
 
 const jimNightshade = Jim_Nightshade({
   weight: "400",
@@ -239,6 +260,7 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });
   const [currentStepIndex, moveStep] = useState(0);
   const [fontIndex, setFontIndex] = useState(0);
+  const [activeH4, setActiveH4] = useState<string | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -303,32 +325,47 @@ export default function Home() {
         style={{ background: spotlightBackground }}
         data-step-id='0'
       >
-        <h1 style={{userSelect: 'none'}} className={`${fonts[fontIndex]} text-center text-9xl text-white`}>
+        <h1 className={`${fonts[fontIndex]} text-center text-9xl text-white select-none h-50`}>
             {" "}
             Stefano Biglia{" "}
         </h1>
       </main>
       <section
-        id="about-me-section"
-        className= {`flex-col items-center ${currentStepIndex > 0 ? "is-open" : ""} h-screen !pt-2 !px-2`}
+        className= {`flex-col items-center ${currentStepIndex > 0 ? "flex" : "hidden"} h-screen !px-2 !pt-2`}
         data-step-id='1'
 
-        onClick={() => {
+        /*onClick={() => {
           if (currentStepIndex < 2) moveStep(2);
-        }}
+        }}*/
       >
-        <div className="flex flex-col h-full w-full bg-white rounded-t-xl shadow-2xl !py-2 justify-start gap-5">
-          <div className="group flex h-fit items-end !mx-7 hover:cursor-pointer !my-6">
-            <h4 className={`text-8xl h-fit w-300 text-black border-be-2 border-black ${stackSansText.className} group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl italic">D</span>esa<span className="italic">rro</span>llo <span className="italic">Web</span> Full<span className="italic">St</span>ack</h4>
+        <div className="flex flex-row h-full w-full bg-white rounded-t-xl shadow-2xl !py-5 !px-15 select-none">
+          <div className="flex flex-col justify-center w-full">
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
+            <h4 onClick= {() => {setActiveH4( activeH4 === 'fullstack-h4' ? null : 'fullstack-h4')}
+          }className={`${activeH4 === 'fullstack-h4' ? 'text-9xl !mb-7' : 'text-8xl'} h-fit !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}
+          >desarrollo fullstack</h4>
+            <img src={"images/html.png"} className={`${activeH4 === 'fullstack-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
+            </div>  
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
+            <h4 onClick= {() => {setActiveH4( activeH4 === 'data-h4' ? null : 'data-h4')}
+          }className={`${activeH4 === 'data-h4' ? 'text-9xl !mb-7' : 'text-8xl'} !py-10 overflow-y-hidden h-fit w-fit text-black hover:cursor-pointer ${neueHaasBlack.className} transition-all duration-400 ease-out`}>análisis de datos</h4>
+            <img src={"images/python.png"} className={`${activeH4 === 'data-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
+            </div>
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
+            <h4 onClick= {() => {setActiveH4( activeH4 === 'database-h4' ? null : 'database-h4')}
+          }className={`${activeH4 === 'database-h4' ? 'text-9xl !mb-7' : 'text-8xl'} !py-10 overflow-y-hidden w-fit text-black hover:cursor-pointer ${neueHaasBlack.className} transition-all duration-400 ease-out`}>base de datos</h4>
+            <img src={"images/oracle.png"} className={`${activeH4 === 'database-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
+            </div>
+            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden">
+            <h4 onClick= {() => {setActiveH4( activeH4 === 'others-h4' ? null : 'others-h4')}
+          }className={`${activeH4 === 'others-h4' ? 'text-9xl !mb-7' : 'text-8xl'} !py-10 overflow-y-hidden w-fit text-black hover:cursor-pointer ${neueHaasBlack.className} transition-all duration-400 ease-out`}>otros</h4>
+            <img src={"images/amazon.png"} className={`${activeH4 === 'others-h4' ? '!mt-26 opacity-100' : '!m-[-10] opacity-0'} w-fit h-15 translate-y-full absolute left-0 top-0 transition-all duration-500 ease-out`}></img>
+            </div>     
           </div>
-          <div className="group flex h-fit items-end !mx-7 justify-end hover:cursor-pointer !mt-18">
-            <h4 className={`text-8xl !me-20 h-fit w-206 text-black border-be-2 border-black ${stackSansText.className} text-right group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl">A</span>nálisis de Datos</h4>
-          </div>
-          <div className="group flex h-fit items-end !mx-7 hover:cursor-pointer justify-start !mt-10">
-            <h4 className={`text-8xl !ms-30 h-fit w-188 text-black border-be-2 border-black ${stackSansText.className} group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl">B</span>ases de Datos</h4>
-          </div>
-          <div className="group flex h-fit items-end !mx-7 justify-end hover:cursor-pointer !mt-6">
-            <h4 className={`text-8xl !me-50 h-fit w-73 text-black border-be-2 border-black ${stackSansText.className} text-right group-hover:w-full transition-[width] duration-200 ease-in`}><span className="text-9xl">O</span>tros</h4>
+          <div className="w-[40%] flex flex-col justify-center items-center">
+            <div className="h-60 w-40 bg-blue-500">
+
+            </div>
           </div>
         </div>
       </section>

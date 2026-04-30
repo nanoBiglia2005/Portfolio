@@ -3,8 +3,13 @@
 import { act, useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import localFont from "next/font/local";
-import { Roboto, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
+import { Lobster, Roboto, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
 
+const lobster = Lobster({
+  weight: "400",
+  style: "normal",
+  variable: "--font-lobster",
+});
 const neueHaasBlack = localFont({
   src: [
     { path: "../../public/fonts/NeueHaasDisplayBlack.woff2", weight: "400", style: "normal"},
@@ -94,6 +99,24 @@ const fonts = [
 const BASE_COLOR = "#5977d8";
 const SPOT_COLOR = "#a2e7f3";
 const SPOT_RADIUS_PX = 80;
+const BACKGROUND_SHAPES_COUNT = 14;
+const BACKGROUND_SHAPES_BASE_SPEED_S = 12;
+const BACKGROUND_SHAPES_SPEED_VARIATION_S = 5;
+const BACKGROUND_SHAPES_MIN_SIZE_PX = 140;
+const BACKGROUND_SHAPES_MAX_SIZE_PX = 184;
+const BACKGROUND_SHAPES_OPACITY = 0.15;
+const BACKGROUND_SHAPES_COLORS = ["#5977d8", "#8fa3ea", "#a2e7f3"];
+
+type BackgroundShapeKind = "circle" | "triangle" | "hexagon";
+type BackgroundShape = {
+  kind: BackgroundShapeKind;
+  size: number;
+  top: number;
+  delay: number;
+  duration: number;
+  opacity: number;
+  color: string;
+};
 
 
 
@@ -261,6 +284,48 @@ export default function Home() {
   const [currentStepIndex, moveStep] = useState(0);
   const [fontIndex, setFontIndex] = useState(0);
   const [activeH4, setActiveH4] = useState<string | null>(null);
+  const aboutBackgroundShapes = useMemo<BackgroundShape[]>(() => {
+    const shapeKinds: BackgroundShapeKind[] = ["triangle", "circle", "hexagon"];
+
+    return Array.from({ length: BACKGROUND_SHAPES_COUNT }, (_, index) => {
+      const size =
+        BACKGROUND_SHAPES_MIN_SIZE_PX +
+        Math.random() * (BACKGROUND_SHAPES_MAX_SIZE_PX - BACKGROUND_SHAPES_MIN_SIZE_PX);
+
+      return {
+        kind: shapeKinds[index % shapeKinds.length],
+        size,
+        top: Math.random() * 100,
+        delay: -Math.random() * (BACKGROUND_SHAPES_BASE_SPEED_S + BACKGROUND_SHAPES_SPEED_VARIATION_S),
+        duration: BACKGROUND_SHAPES_BASE_SPEED_S + Math.random() * BACKGROUND_SHAPES_SPEED_VARIATION_S,
+        opacity: BACKGROUND_SHAPES_OPACITY + Math.random() * 0.12,
+        color: BACKGROUND_SHAPES_COLORS[Math.floor(Math.random() * BACKGROUND_SHAPES_COLORS.length)],
+      };
+    });
+  }, []);
+
+  const [introPhase, setIntroPhase] = useState<'hidden' | 'center' | 'moved' | 'skills'>(
+    currentStepIndex > 0 ? 'skills' : 'hidden'
+  );
+
+  const [skillsAnimating, setSkillsAnimating] = useState(currentStepIndex > 0 ? false : true);
+
+  useEffect(() => {
+    if (currentStepIndex === 1 && introPhase === 'hidden') {
+      setTimeout(() => setIntroPhase('center'), 300);
+      setTimeout(() => setIntroPhase('moved'), 4000);
+      setTimeout(() => setIntroPhase('skills'), 4500);
+      setTimeout(() => setSkillsAnimating(false), 4500 + 1600 + 600);
+    }
+  }, [currentStepIndex]);
+  
+  useEffect(() => {
+    if (currentStepIndex === 1 && introPhase === 'hidden') {
+      setTimeout(() => setIntroPhase('center'), 300);
+      setTimeout(() => setIntroPhase('moved'), 4000);
+      setTimeout(() => setIntroPhase('skills'), 4500);
+    }
+  }, [currentStepIndex]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -332,64 +397,150 @@ export default function Home() {
         </h1>
       </main>
       <section
-        className= {`flex-col items-center ${currentStepIndex > 0 ? "flex" : "hidden"} h-screen !px-2 !pt-2`}
+        className= {`relative overflow-hidden flex-col items-center ${currentStepIndex > 0 ? "flex" : "hidden"} h-screen !px-2 !pt-2`}
         data-step-id='1'
 
         /*onClick={() => {
           if (currentStepIndex < 2) moveStep(2);
         }}*/
       >
-        <div className="flex flex-col-reverse md:flex-row h-full w-full bg-white rounded-t-xl shadow-2xl !py-5 !px-15 select-none">
-          <div className="flex flex-col justify-center w-full">
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
-            onClick= {() => {setActiveH4( activeH4 === 'fullstack-h4' ? null : 'fullstack-h4')}}>
-            <h4 className={`${activeH4 === 'fullstack-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}
+          <div className="relative z-10 flex flex-col md:flex-row-reverse h-full w-full bg-white rounded-t-xl shadow-2xl !py-5 md:!ps-15 !px-15 select-none justify-center items-center gap-5">
+          <div className="about-bg-shapes" aria-hidden="true">
+          {aboutBackgroundShapes.map((shape, index) => (
+            <span
+              key={`bg-shape-${index}`}
+              className={`about-bg-shape about-bg-shape--${shape.kind}`}
+              style={
+                {
+                  "--shape-size": `${shape.size}px`,
+                  "--shape-top": `${shape.top}%`,
+                  "--shape-delay": `${shape.delay}s`,
+                  "--shape-duration": `${shape.duration}s`,
+                  "--shape-opacity": `${shape.opacity}`,
+                  "--shape-color": shape.color,
+                } as React.CSSProperties
+              }
+            />
+          ))}
+        </div>
+        <div
+      className={`flex items-center transition-all duration-1000 ease-in-out
+        ${introPhase === 'hidden' ? 'opacity-0 w-0' : ''}
+        ${introPhase === 'center' ? 'opacity-100 absolute inset-0 flex justify-center items-center z-20 w-full' : ''}
+        ${introPhase === 'moved' || introPhase === 'skills' ? 'opacity-100 md:w-[40%] w-fit' : ''}
+      `}
+    >
+      <div className={`${lobster.className} text-black lg:text-2xl text-xs flex flex-col !px-5 !py-0 md:!py-10 h-fit justify-center md:gap-10 gap-3`}>
+        <div
+          className={`transition-all duration-700 ease-out
+            ${introPhase !== 'hidden' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          style={{ transitionDelay: introPhase !== 'hidden' ? '600ms' : '0ms' }}
+        >
+          <span className={`${notable.className} float-tag float-tag--1 bg-[#5977d8] lg:text-4xl md:text-2xl text-lg text-blue-300 !p-3 w-fit text-center shadow-2xl !ms-[10%] rounded-sm`}>
+            Hola!
+          </span>
+          <span className="text-left w-fit text-black !me-[15%] self-end"> soy</span>
+        </div>
+
+        <span
+          className={`${notable.className} float-tag float-tag--2 bg-[#5977d8] text-blue-300 lg:text-5xl md:text-3xl !p-3 w-full shadow-2xl text-right rounded-sm
+            transition-all duration-700 ease-out
+            ${introPhase !== 'hidden' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          style={{ transitionDelay: introPhase !== 'hidden' ? '1200ms' : '0ms' }}
+        >
+          Stefano<br />Biglia
+        </span>
+        <div
+          className={`flex h-fit transition-all duration-700 ease-out
+            ${introPhase !== 'hidden' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          style={{ transitionDelay: introPhase !== 'hidden' ? '1800ms' : '0ms' }}
+        >
+          <span className="text-right w-fit text-black !me-[5%] self-end">un</span>
+          <span className={`${notable.className} float-tag float-tag--3 bg-[#5977d8] text-blue-300 lg:text-2xl text-sm md:text-xl !p-3 w-fit shadow-2xl rounded-sm`}>
+            Técnico en Programación
+          </span>
+        </div>
+
+        <div
+          className={`flex flex-col justify-center items-center gap-2 transition-all duration-700 ease-out
+            ${introPhase !== 'hidden' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+          style={{ transitionDelay: introPhase !== 'hidden' ? '2600ms' : '0ms' }}
+        >
+          <span className="text-black !ms-[5%] self-start">graduado de la</span>
+          <span className={`${notable.className} float-tag float-tag--4 bg-[#5977d8] text-blue-300 lg:text-2xl text-xs md:text-lg !p-3 w-fit shadow-2xl rounded-sm`}>
+            UTN FRH.
+          </span>
+        </div>
+      </div>
+    </div>
+    <div className="flex flex-col justify-center w-full">
+      <div
+        className={`flex flex-col border-black border-y-2 hover:cursor-pointer relative overflow-hidden
+          transition-all duration-2000 ease-out
+          ${introPhase === 'skills' ? 'max-w-full opacity-100' : 'max-w-0 opacity-0'}`}
+        style={{ transitionDelay: introPhase === 'skills' ? '400ms' : '0ms' }}
+        onClick={() => setActiveH4(activeH4 === 'fullstack-h4' ? null : 'fullstack-h4')}
+      >
+        <h4 className={`${skillsAnimating ? 'whitespace-nowrap' : ''} ${activeH4 === 'fullstack-h4' ? '2xl:text-8xl md:text-5xl text-2xl md:!pt-10 !pt-5 !pb-0 md:!pb-0' : ''} 2xl:text-7xl md:text-4xl text-1xl !py-5 md:!py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}
           >desarrollo fullstack.</h4>
           <div className="flex w-full justify-end">
-            <img src={"images/html.png"} alt='html' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/javascript.png"} alt='javascript' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/css.png"} alt='css' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/php.png"} alt='php' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-10 sm:h-7 h-4 2xl:!mt-6 sm:!mt-4 !mt-3' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/c.png"} alt='c' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            <img src={"images/c++.png"} alt='c++' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            <img src={"images/c sharp.png"} alt='c sharp' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            <img src={"images/next.png"} alt='next' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/html.png"} alt='html' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/javascript.png"} alt='javascript' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/css.png"} alt='css' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/php.png"} alt='php' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-10 md:h-7 h-4 2xl:!mt-6 md:!mt-4 !mt-3' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/c.png"} alt='c' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/c++.png"} alt='c++' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/c sharp.png"} alt='c sharp' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/next.png"} alt='next' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
           </div>
-            </div>  
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
-            onClick= {() => {setActiveH4( activeH4 === 'data-h4' ? null : 'data-h4')}}>
-            <h4 className={`${activeH4 === 'data-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>análisis de datos.</h4>
-            <div className="flex">
-            <img src={"images/python.png"} alt='python' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/excel.png"} alt='excel' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            <img src={"images/power bi.png"} alt='power bi' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            </div>
-            </div>
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
-            onClick= {() => {setActiveH4( activeH4 === 'database-h4' ? null : 'database-h4')}}>
-            <h4 className={`${activeH4 === 'database-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>base de datos.</h4>
-            <div className="flex">
-            <img src={"images/oracle.png"} alt='oracle' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/mysql.png"} alt='mysql' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            <img src={"images/postgresql.webp"} alt='postgresql' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 sm:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
-            </div>
-            </div>
-            <div className="flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-y-hidden"
-            onClick= {() => {setActiveH4( activeH4 === 'others-h4' ? null : 'others-h4')}}>
-            <h4 className={`${activeH4 === 'others-h4' ? '2xl:text-8xl sm:text-5xl text-2xl !pt-10 !pb-0' : ''} 2xl:text-7xl sm:text-4xl text-1xl !py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>otros</h4>
-            <div className="flex">
-            <img src={"images/amazon.png"} alt='amazon' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 sm:h-8 h-4 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/jira.png"} alt='jira' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 sm:h-8 h-4 !my-2' : ''} !ml-2 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/confluence.webp"} alt='confluence' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 sm:h-8 h-4 !my-2' : ''} !ml-4 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            </div>    
-            </div> 
-          </div>
-          <div className="w-[60%] flex flex-col justify-center items-center">
-            <div className="h-60 w-40 bg-blue-500">
+      </div>
 
+      <div
+        className={`flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-hidden
+          transition-all duration-2000 ease-out
+          ${introPhase === 'skills' ? 'max-w-full opacity-100' : 'max-w-0 opacity-0'}`}
+        style={{ transitionDelay: introPhase === 'skills' ? '800ms' : '0ms' }}
+        onClick={() => setActiveH4(activeH4 === 'data-h4' ? null : 'data-h4')}
+      >
+            <h4 className={`${skillsAnimating ? 'whitespace-nowrap' : ''} ${activeH4 === 'data-h4' ? '2xl:text-8xl md:text-5xl text-2xl md:!pt-10 !pt-5 !pb-0 md:!pb-0' : ''} 2xl:text-7xl md:text-4xl text-1xl !py-5 md:!py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>análisis de datos.</h4>
+            <div className="flex w-full justify-end">
+            <img src={"images/python.png"} alt='python' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/excel.png"} alt='excel' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/power bi.png"} alt='power bi' className={`${activeH4 === 'data-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
             </div>
-          </div>
-        </div>
+      </div>
+
+      <div
+        className={`flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-hidden
+          transition-all duration-2000 ease-out
+          ${introPhase === 'skills' ? 'max-w-full opacity-100' : 'max-w-0 opacity-0'}`}
+        style={{ transitionDelay: introPhase === 'skills' ? '1200ms' : '0ms' }}
+        onClick={() => setActiveH4(activeH4 === 'database-h4' ? null : 'database-h4')}
+      >
+        <h4 className={`${skillsAnimating ? 'whitespace-nowrap' : ''} ${activeH4 === 'database-h4' ? '2xl:text-8xl md:text-5xl text-2xl md:!pt-10 !pt-5 !pb-0 md:!pb-0' : ''} 2xl:text-7xl md:text-4xl text-1xl !py-5 md:!py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>base de datos.</h4>
+            <div className="flex w-full justify-end">
+            <img src={"images/oracle.png"} alt='oracle' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/mysql.png"} alt='mysql' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            <img src={"images/postgresql.webp"} alt='postgresql' className={`${activeH4 === 'database-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
+            </div>
+      </div>
+
+      <div
+        className={`flex flex-col border-black border-be-2 hover:cursor-pointer relative overflow-hidden
+          transition-all duration-2000 ease-out
+          ${introPhase === 'skills' ? 'max-w-full opacity-100' : 'max-w-0 opacity-0'}`}
+        style={{ transitionDelay: introPhase === 'skills' ? '1600ms' : '0ms' }}
+        onClick={() => setActiveH4(activeH4 === 'others-h4' ? null : 'others-h4')}
+      >
+        <h4 className={`${skillsAnimating ? 'whitespace-nowrap' : ''} ${activeH4 === 'others-h4' ? '2xl:text-8xl md:text-5xl text-2xl md:!pt-10 !pt-5 !pb-0 md:!pb-0' : ''} 2xl:text-7xl md:text-4xl text-1xl !py-5 md:!py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>otros</h4>
+            <div className="flex w-full justify-end">
+            <img src={"images/amazon.png"} alt='amazon' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/jira.png"} alt='jira' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} !ml-2 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/confluence.webp"} alt='confluence' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} !ml-4 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            </div>  
+      </div>
+    </div>
+    </div>
       </section>
 
       <section

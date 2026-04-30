@@ -112,3 +112,93 @@ main {
   display: flex;
 }
 
+@keyframes floatTag {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(1px, -8px, 0) rotate(0.7deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+.float-tag {
+  display: inline-block;
+  animation-name: floatTag;
+  animation-duration: 5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.float-tag--1 {
+  animation-delay: 0s;
+}
+
+.float-tag--2 {
+  animation-delay: 0.8s;
+  animation-duration: 5.8s;
+}
+
+.float-tag--3 {
+  animation-delay: 1.4s;
+  animation-duration: 6.2s;
+}
+
+.float-tag--4 {
+  animation-delay: 2.1s;
+  animation-duration: 5.4s;
+}
+
+.about-bg-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.about-bg-shape {
+  position: absolute;
+  left: -12%;
+  top: var(--shape-top);
+  width: var(--shape-size);
+  height: var(--shape-size);
+  opacity: var(--shape-opacity);
+  background-color: var(--shape-color);
+  animation: driftShape var(--shape-duration) linear infinite;
+  animation-delay: var(--shape-delay);
+  will-change: transform;
+}
+
+.about-bg-shape--circle {
+  border-radius: 999px;
+}
+
+.about-bg-shape--triangle {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-left: calc(var(--shape-size) * 0.5) solid transparent;
+  border-right: calc(var(--shape-size) * 0.5) solid transparent;
+  border-bottom: var(--shape-size) solid var(--shape-color);
+}
+
+.about-bg-shape--hexagon {
+  clip-path: polygon(25% 7%, 75% 7%, 100% 50%, 75% 93%, 25% 93%, 0% 50%);
+}
+
+@keyframes driftShape {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateX(56vw) translateY(-16px) rotate(140deg);
+  }
+  100% {
+    transform: translateX(120vw) translateY(0) rotate(280deg);
+  }
+}
+

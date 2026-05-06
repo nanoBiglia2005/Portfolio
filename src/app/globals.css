@@ -67,51 +67,6 @@ main {
   cursor: none;
 }
 
-
-#proyects-section{
-  display: none;
-  gap: 13rem;
-  justify-content: space-around;
-}
-
-#proyects-section.is-open {
-  display: flex;
-}
-
-#music-article, #portfolio-article{
-  display: none;
-}
-
-#music-article.is-open, #portfolio-article.is-open{
-  display: flex;
-}
-
-#contact-section{
-  padding: 13rem 5rem; 
-  display: none; 
-  align-items: center; 
-  flex-direction: column;
-}
-
-#contact-section.is-open{
-  display: flex;
-}
-
-#menu-bar{
-  display: none; 
-  flex-direction: column; 
-  position: fixed; 
-  z-index: 10; 
-  background-color:white; 
-  padding: 20px 15px; 
-  gap: 15px;
-  margin: 40px 0 0 40px;
-}
-
-#menu-bar.is-open{
-  display: flex;
-}
-
 @keyframes floatTag {
   0% {
     transform: translate3d(0, 0, 0) rotate(0deg);

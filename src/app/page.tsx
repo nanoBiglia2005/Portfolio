@@ -3,8 +3,9 @@
 import { act, useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import localFont from "next/font/local";
-import { ArrowFatLinesDownIcon } from "@phosphor-icons/react";
+import { ArrowFatLinesDownIcon, LinkSimpleIcon } from "@phosphor-icons/react";
 import { Lobster, Roboto, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
+import Link from "next/link";
 
 const lobster = Lobster({
   weight: "400",
@@ -200,6 +201,15 @@ export default function Home() {
     const currentStep = document.querySelector<HTMLElement>(`[data-step-id="${currentStepIndex}"]`)
 
     if (!currentStep) return;
+    if (currentStepIndex === 1){
+      const y = currentStep.getBoundingClientRect().top + window.scrollY - 10;
+      window.scrollTo({top: y, behavior:'smooth'});
+      
+      return;
+    }
+    
+
+    if (!currentStep) return;
 
     currentStep.scrollIntoView({
       behavior: "smooth",
@@ -235,7 +245,7 @@ export default function Home() {
             Stefano Biglia{" "}
         </h1>
       </main>
-      <div className={`relative bg-white rounded-t-xl shadow-2xl !mx-2 !mt-5 ${currentStepIndex > 0 ? "" : "hidden"}`} data-step-id='1'>
+      <div className={`overflow-hidden relative bg-white rounded-t-xl shadow-2xl !mx-2 !mt-5 ${currentStepIndex > 0 ? "" : "hidden"}`} data-step-id='1'>
       <div className="about-bg-shapes" aria-hidden="true">
           {aboutBackgroundShapes.map((shape, index) => (
             <span
@@ -383,7 +393,7 @@ export default function Home() {
     </div>
       </section>
       <section
-        className={`${currentStepIndex > 1 ? "flex" : "hidden"} h-fit w-full flex-col`}
+        className={`${currentStepIndex > 1 ? "flex" : "hidden"} h-fit w-full flex-col relative !px-5`}
         data-step-id='2'
         >     
         <article
@@ -392,11 +402,24 @@ export default function Home() {
           }}
           className="flex justify-center items-center gap-5 h-screen w-full"
         >
-          <p style={{width: '500px', fontSize: '1.5rem'}}>
-          StockiFy fue una aplicación web apuntada a ayudar a pequeños emprendimientos con el manejo de inventarios.</p>
-
-          <img src={'/images/stockify.png'} style={{height: '500px', marginTop: '100px'}}></img>
-          <h2 style={{fontSize: '3rem', height: 'fit-content', alignSelf:'start', position:'absolute', margin: '2rem'}}>StockiFy</h2>
+          <div className="flex w-[100%] justify-center gap-15 items-center flex-col lg:flex-row">
+            <div>
+            <div className="xl:h-100 relative transition-all duration-200 ease-out"><img src={'/images/stockify.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#5977d8] border-1 border-black shadow-xl'></img></div>  
+            <div className="float-tag float-tag--3 w-full">
+            <div className="flex absolute">
+            <img src={"images/html.png"} alt='html' className='lg:h-15 sm:h-9 h-5 !my-2 w-auto transition-all duration-200 ease-out'></img>
+            <img src={"images/javascript.png"} alt='javascript' className='lg:h-15 sm:h-9 !my-2 h-5 w-fit transition-all duration-200 ease-out'></img>
+            <img src={"images/css.png"} alt='css' className='lg:h-15 sm:h-9  !my-2 h-5 !ml-2 w-fit transition-all duration-200 ease-out'></img>
+            <img src={"images/php.png"} alt='php' className='lg:h-10 sm:h-7 lg:!mt-6 !mt-3 h-4 !ml-2 w-fit transition-all duration-200 ease-out'></img>
+            </div>
+            </div>
+            </div>
+            <div>
+            <h2 className={`${neueHaasBold.className} float-tag text-black text-4xl sm:text-7xl text-shadow-lg sm:!mb-9 !mb-4 transition-all duration-200 ease-out`}>StockiFy</h2>
+            <h4 className={`${neueHaasBlack.className} h-fit border-b-2 border-black sm:text-lg sm:w-90 text-black w-70 !pb-2 text-xs transition-all duration-200 ease-out`}>una aplicación web FullStack diseñada para ayudar a pequeños emprendimientos con el manejo del stock.</h4>
+            <a href="https://github.com/nanoBiglia2005/StockiFy" target="_blank" rel="noopener noreferrer" className="flex items-center !mt-5 w-fit !p-1 group" ><LinkSimpleIcon size={20} className="text-black group-hover:text-blue-600 transition-colors duration-100 ease-out"/><p className={`text-black ${stackSansText.className} group-hover:border-b-2 group-hover:text-blue-600 sm:text-base text-xs transition-all duration-100 ease-out`}>GitHub</p></a>
+            </div>
+          </div>
         </article>
         
         <article

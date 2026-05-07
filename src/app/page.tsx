@@ -1,11 +1,9 @@
 "use client";
 
-import { act, useEffect, useMemo, useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useEffect, useMemo, useState } from "react";
 import localFont from "next/font/local";
 import { ArrowFatLinesDownIcon, LinkSimpleIcon } from "@phosphor-icons/react";
-import { Lobster, Roboto, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
-import Link from "next/link";
+import { Lobster, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
 
 const lobster = Lobster({
   weight: "400",
@@ -25,12 +23,6 @@ const neueHaasBold = localFont({
   ],
   variable: "--font-neueHass-bold",
 });
-
-const roboto = Roboto({
-  weight: "800",
-  style: "normal",
-  variable: "--font-roboto",
-})
 
 const jimNightshade = Jim_Nightshade({
   weight: "400",
@@ -245,7 +237,7 @@ export default function Home() {
             Stefano Biglia{" "}
         </h1>
       </main>
-      <div className={`overflow-hidden relative bg-white rounded-t-xl shadow-2xl !mx-2 !mt-5 ${currentStepIndex > 0 ? "" : "hidden"}`} data-step-id='1'>
+      <div className={`overflow-hidden relative bg-white rounded-t-xl shadow-2xl !mx-2 !mt-5 ${currentStepIndex > 0 ? "" : "hidden"} ${currentStepIndex > 4 ? "!mb-2 rounded-b-xl" : ""}` } data-step-id='1'>
       <div className="about-bg-shapes" aria-hidden="true">
           {aboutBackgroundShapes.map((shape, index) => (
             <span
@@ -265,9 +257,9 @@ export default function Home() {
           ))}
         </div>
       <section
-        className= {`relative overflow-hidden flex-col items-center flex h-screen`}
+        className= {`relative overflow-hidden flex-col items-center flex h-screen min-h-[500px]`}
       >
-        <div className={`z-10 flex flex-col md:flex-row-reverse h-full w-full !py-5 md:!ps-15 !px-15 select-none justify-center items-center gap-5`}>
+        <div className={`z-10 flex flex-col md:flex-row-reverse sm:h-full h-fit w-full !py-5 sm:!px-15 !px-5 select-none justify-center items-center gap-5`}>
         <div
       className={`flex items-center transition-all duration-1000 ease-in-out
         ${introPhase === 'hidden' ? 'opacity-0 w-0' : ''}
@@ -301,7 +293,7 @@ export default function Home() {
           style={{ transitionDelay: introPhase !== 'hidden' ? '1800ms' : '0ms' }}
         >
           <span className="text-right w-fit text-black !me-[5%] self-end">un</span>
-          <span className={`${notable.className} float-tag float-tag--3 bg-[#5977d8] text-blue-300 lg:text-2xl text-sm md:text-xl !p-3 w-fit shadow-2xl rounded-sm`}>
+          <span className={`${notable.className} float-tag float-tag--3 bg-[#5977d8] text-blue-300 lg:text-2xl text-xs md:text-xl !p-3 w-fit shadow-2xl rounded-sm`}>
             Técnico en Programación
           </span>
         </div>
@@ -312,8 +304,8 @@ export default function Home() {
           style={{ transitionDelay: introPhase !== 'hidden' ? '2600ms' : '0ms' }}
         >
           <span className="text-black !ms-[5%] self-start">graduado de la</span>
-          <span className={`${notable.className} float-tag float-tag--4 bg-[#5977d8] text-blue-300 lg:text-2xl text-xs md:text-lg !p-3 w-fit shadow-2xl rounded-sm`}>
-            UTN FRH.
+          <span className={`${notable.className} float-tag float-tag--4 bg-[#5977d8] text-blue-300 lg:text-2xl text-xs md:text-lg !p-3 w-fit shadow-2xl rounded-sm !mt-2`}>
+            <img src={'images/utn haedo.png'} className="md:w-70 w-20 transition-width duration-300 ease-in"/>
           </span>
         </div>
       </div>
@@ -331,7 +323,7 @@ export default function Home() {
           <div className="flex w-full justify-end">
             <img src={"images/html.png"} alt='html' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
             <img src={"images/javascript.png"} alt='javascript' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
-            <img src={"images/css.png"} alt='css' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/tailwind.png"} alt='html' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2 md:!py-2 !py-1 !ml-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>     
             <img src={"images/php.png"} alt='php' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-10 md:h-7 h-4 2xl:!mt-6 md:!mt-4 !mt-3' : ''} opacity-0 h-0 !ml-2 w-fit transition-all duration-500 ease-out`}></img>
             <img src={"images/c.png"} alt='c' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
             <img src={"images/c++.png"} alt='c++' className={`${activeH4 === 'fullstack-h4' ? 'opacity-100 2xl:h-15 md:h-10 h-6 !my-2' : ''} opacity-0 h-0 w-fit !ml-2 transition-all duration-500 ease-out`}></img>
@@ -377,40 +369,41 @@ export default function Home() {
         style={{ transitionDelay: introPhase === 'skills' ? '1600ms' : '0ms' }}
         onClick={() => setActiveH4(activeH4 === 'others-h4' ? null : 'others-h4')}
       >
-        <h4 className={`${skillsAnimating ? 'whitespace-nowrap' : ''} ${activeH4 === 'others-h4' ? '2xl:text-8xl md:text-5xl text-2xl md:!pt-10 !pt-5 !pb-0 md:!pb-0' : ''} 2xl:text-7xl md:text-4xl text-1xl !py-5 md:!py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>otros</h4>
+        <h4 className={`${skillsAnimating ? 'whitespace-nowrap' : ''} ${activeH4 === 'others-h4' ? '2xl:text-8xl md:text-5xl text-2xl md:!pt-10 !pt-5 !pb-0 md:!pb-0' : ''} 2xl:text-7xl md:text-4xl text-1xl !py-5 md:!py-10 overflow-y-hidden w-fit ${neueHaasBlack.className} text-black transition-all duration-400 ease-out`}>otros.</h4>
             <div className="flex w-full justify-end">
             <img src={"images/amazon.png"} alt='amazon' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
             <img src={"images/jira.png"} alt='jira' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} !ml-2 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
             <img src={"images/confluence.webp"} alt='confluence' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} !ml-4 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/vercel.png"} alt='javascript' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} !ml-4 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
+            <img src={"images/github.png"} alt='confluence' className={`${activeH4 === 'others-h4' ? 'opacity-100 2xl:h-11 md:h-8 h-4 !my-2' : ''} !ml-4 opacity-0 h-0 w-fit transition-all duration-500 ease-out`}></img>
             </div>  
       </div>
     </div>
     </div>
     <div className={`${currentStepIndex > 1 ? 'hidden' : ''} group absolute w-screen h-[10%] z-20 flex items-center justify-center bottom-0 bg-gradient-to-b from-transparent to-gray-900/50 hover:to-gray-900/70 transition duration-300 ease-out hover:cursor-pointer overflow-hidden`}
-    onClick={() => {
-      if (currentStepIndex < 2) moveStep(2);}}>
-          <ArrowFatLinesDownIcon size={32} color="black" opacity={0} className="group-hover:opacity-70 transition-opacity duration-300 ease-out translate-y-[-250%] group-hover:translate-y-0 transition-transform duration-500 ease-out"/>
-    </div>
+            onClick={() => {
+            if (currentStepIndex < 2) moveStep(2);}}>
+              <ArrowFatLinesDownIcon size={32} color="black" className="group-hover:opacity-70  opacity-30 transition-opacity duration-300 ease-out"/>
+          </div>
       </section>
       <section
-        className={`${currentStepIndex > 1 ? "flex" : "hidden"} h-fit w-full flex-col relative !px-5`}
+        className={`${currentStepIndex > 1 ? "flex" : "hidden"} h-fit w-full flex-col relative !px-5 select-none`}
         data-step-id='2'
         >     
         <article
-          onClick={() => {
-          if (currentStepIndex < 3) moveStep(3);
-          }}
-          className="flex justify-center items-center gap-5 h-screen w-full"
+          className="flex justify-center items-center gap-5 h-screen w-full min-h-[500px]"
         >
           <div className="flex w-[100%] justify-center gap-15 items-center flex-col lg:flex-row">
             <div>
-            <div className="xl:h-100 relative transition-all duration-200 ease-out"><img src={'/images/stockify.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#5977d8] border-1 border-black shadow-xl'></img></div>  
+            <div className="2xl:h-130 relative transition-all duration-200 ease-out"><img src={'/images/stockify.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#BB6663] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_red] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
             <div className="float-tag float-tag--3 w-full">
             <div className="flex absolute">
-            <img src={"images/html.png"} alt='html' className='lg:h-15 sm:h-9 h-5 !my-2 w-auto transition-all duration-200 ease-out'></img>
-            <img src={"images/javascript.png"} alt='javascript' className='lg:h-15 sm:h-9 !my-2 h-5 w-fit transition-all duration-200 ease-out'></img>
-            <img src={"images/css.png"} alt='css' className='lg:h-15 sm:h-9  !my-2 h-5 !ml-2 w-fit transition-all duration-200 ease-out'></img>
-            <img src={"images/php.png"} alt='php' className='lg:h-10 sm:h-7 lg:!mt-6 !mt-3 h-4 !ml-2 w-fit transition-all duration-200 ease-out'></img>
+            <img src={"images/html.png"} alt='html' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/javascript.png"} alt='javascript' className='lg:h-15 sm:h-9 !my-2 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 w-fit transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/css.png"} alt='css' className='lg:h-15 sm:h-9 !my-2 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !ml-2 w-fit transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/php.png"} alt='php' className='lg:h-10 sm:h-7 lg:!mt-6 !mt-3 h-4 lg:hover:h-12 sm:hover:h-9 hover:h-6 !ml-2 w-fit transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/mysql.png"} alt='mysql' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 !ml-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/github.png"} alt='confluence' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 !ml-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
             </div>
             </div>
             </div>
@@ -420,38 +413,70 @@ export default function Home() {
             <a href="https://github.com/nanoBiglia2005/StockiFy" target="_blank" rel="noopener noreferrer" className="flex items-center !mt-5 w-fit !p-1 group" ><LinkSimpleIcon size={20} className="text-black group-hover:text-blue-600 transition-colors duration-100 ease-out"/><p className={`text-black ${stackSansText.className} group-hover:border-b-2 group-hover:text-blue-600 sm:text-base text-xs transition-all duration-100 ease-out`}>GitHub</p></a>
             </div>
           </div>
+          <div className={`${currentStepIndex > 2 ? 'hidden' : ''} group absolute w-screen h-[10%] z-20 flex items-center justify-center bottom-0 bg-gradient-to-b from-transparent to-gray-900/50 hover:to-gray-900/70 transition duration-300 ease-out hover:cursor-pointer overflow-hidden`}
+            onClick={() => {
+            if (currentStepIndex < 3) moveStep(3);}}>
+              <ArrowFatLinesDownIcon size={32} color="black" className="group-hover:opacity-70  opacity-30 transition-opacity duration-300 ease-out"/>
+          </div>
         </article>
         
         <article
-          className={`${currentStepIndex > 2 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen w-full`}
-          data-step-id='3'
+          className={`${currentStepIndex > 2 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen min-h-[500px] w-full sm:!mt-30`}
+          data-step-id='3'>
 
-          onClick={() => {
-            if (currentStepIndex < 4) moveStep(4);
-          }}        >
-          <p style={{width: '500px', fontSize: '1.5rem'}}>
-          StockiFy fue una aplicación web apuntada a ayudar a pequeños emprendimientos con el manejo de inventarios.</p>
-
-          <img src={'/images/stockify.png'} style={{height: '500px', marginTop: '100px'}}></img>
-          <h2 style={{fontSize: '3rem', height: 'fit-content', alignSelf:'start', position:'absolute', margin: '2rem'}}>Distribucion de la Musica</h2>
+          <div className="flex w-[100%] justify-center gap-20 items-center flex-col lg:flex-row-reverse">
+            <div>
+            <div className="xl:h-100 relative transition-all duration-200 ease-out"><img src={'/images/musica.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#80B46A] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_#01962e] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
+            <div className="float-tag float-tag--3 w-full">
+            <div className="flex absolute">
+            <img src={"images/python.png"} alt='python' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 !ml-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
+            </div>
+            </div>
+            </div>
+            <div>
+            <h2 className={`${neueHaasBold.className} float-tag text-black text-4xl sm:text-7xl text-shadow-lg sm:!mb-9 !mb-4 transition-all duration-200 ease-out w-40`}>Distribución de la Música</h2>
+            <h4 className={`${neueHaasBlack.className} h-fit border-b-2 border-black sm:text-lg sm:w-90 text-black w-70 !pb-2 text-xs transition-all duration-200 ease-out`}>un estudio sobre la evolución de la distribución de la música en los últimos 40 años hecho con Python (Pandas).</h4>
+            <a href="https://www.kaggle.com/code/stefanobiglia/distribuci-n-de-la-m-sica" target="_blank" rel="noopener noreferrer" className="flex items-center !mt-5 w-fit !p-1 group" ><LinkSimpleIcon size={20} className="text-black group-hover:text-blue-600 transition-colors duration-100 ease-out"/><p className={`text-black ${stackSansText.className} group-hover:border-b-2 group-hover:text-blue-600 sm:text-base text-xs transition-all duration-100 ease-out`}>Kaggle</p></a>
+            </div>
+          </div>
+          <div className={`${currentStepIndex > 3 ? 'hidden' : ''} group absolute w-screen h-[5%] z-20 flex items-center justify-center bottom-0 bg-gradient-to-b from-transparent to-gray-900/50 hover:to-gray-900/70 transition duration-300 ease-out hover:cursor-pointer overflow-hidden`}
+            onClick={() => {
+            if (currentStepIndex < 4) moveStep(4);}}>
+              <ArrowFatLinesDownIcon size={32} color="black" className="group-hover:opacity-70  opacity-30 transition-opacity duration-300 ease-out"/>
+          </div>
         </article>
 
         <article
-          className={`${currentStepIndex > 3 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen w-full`}
-          data-step-id='4'
-
-          onClick={() => {
-            if (currentStepIndex < 5) moveStep(5);
-          }}        >
-          <p style={{width: '500px', fontSize: '1.5rem'}}>
-          StockiFy fue una aplicación web apuntada a ayudar a pequeños emprendimientos con el manejo de inventarios.</p>
-
-          <img src={'/images/stockify.png'} style={{height: '500px', marginTop: '100px'}}></img>
-          <h2 style={{fontSize: '3rem', height: 'fit-content', alignSelf:'start', position:'absolute', margin: '2rem'}}>Mi Portfolio!</h2>
+          className={`${currentStepIndex > 3 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen min-h-[500px] w-full sm:!mt-30`}
+          data-step-id='4'>
+          <div className="flex w-[100%] justify-center gap-15 items-center flex-col lg:flex-row">
+            <div>
+            <div className="xl:h-100 relative transition-all duration-200 ease-out"><img src={'/images/portfolio.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#5977d8] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_blue] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
+            <div className="float-tag float-tag--3 w-full">
+            <div className="flex absolute">
+            <img src={"images/next.png"} alt='next' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/tailwind.png"} alt='html' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:!py-2 sm:hover:h-11 hover:h-7 !ml-2 !my-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>     
+            <img src={"images/vercel.png"} alt='javascript' className='lg:h-15 sm:h-9 !my-2 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !ml-2 w-fit transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/cursor.png"} alt='confluence' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 !ml-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
+            <img src={"images/github.png"} alt='confluence' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 !ml-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
+            </div>
+            </div>
+            </div>
+            <div>
+            <h2 className={`${neueHaasBold.className} float-tag text-black text-4xl sm:text-7xl text-shadow-lg sm:!mb-9 !mb-4 transition-all duration-200 ease-out`}>Mi Portfolio!</h2>
+            <h4 className={`${neueHaasBlack.className} h-fit border-b-2 border-black sm:text-lg sm:w-90 text-black w-70 !pb-2 text-xs transition-all duration-200 ease-out`}>la página web en la que estas ahora mismo :).</h4>
+            <a href="https://github.com/nanoBiglia2005/Portfolio" target="_blank" rel="noopener noreferrer" className="flex items-center !mt-5 w-fit !p-1 group" ><LinkSimpleIcon size={20} className="text-black group-hover:text-blue-600 transition-colors duration-100 ease-out"/><p className={`text-black ${stackSansText.className} group-hover:border-b-2 group-hover:text-blue-600 sm:text-base text-xs transition-all duration-100 ease-out`}>GitHub</p></a>
+            </div>
+          </div>
+          <div className={`${currentStepIndex > 4 ? 'hidden' : ''} group absolute w-screen h-[3%] z-20 flex items-center justify-center bottom-0 bg-gradient-to-b from-transparent to-gray-900/50 hover:to-gray-900/70 transition duration-300 ease-out hover:cursor-pointer overflow-hidden`}
+            onClick={() => {
+            if (currentStepIndex < 5) moveStep(5);}}>
+              <ArrowFatLinesDownIcon size={32} color="black" className="group-hover:opacity-70  opacity-30 transition-opacity duration-300 ease-out"/>
+          </div>
         </article>
 
       </section>
-      </div>
+
       <section
         className={`${currentStepIndex > 4 ? "flex" : "hidden"}`}
         data-step-id='5'>
@@ -460,6 +485,7 @@ export default function Home() {
             <a href="https://github.com/nanoBiglia2005"><h3>GitHub</h3></a>
             </div>
       </section>
+      </div>
     </div>
   );
 }

@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import localFont from "next/font/local";
-import { ArrowFatLinesDownIcon, LinkSimpleIcon } from "@phosphor-icons/react";
+import { ArrowFatLinesDownIcon, LinkSimpleIcon, ArrowCircleDownRightIcon } from "@phosphor-icons/react";
 import { Lobster, Jim_Nightshade, Pinyon_Script, Black_Ops_One , UnifrakturMaguntia, Stack_Sans_Text, Arizonia, Amarante, Rubik_Storm, Notable, Neucha} from "next/font/google";
+
 
 const lobster = Lobster({
   weight: "400",
@@ -90,9 +91,6 @@ const fonts = [
   notable.className,
 ]
 
-const BASE_COLOR = "#5977d8";
-const SPOT_COLOR = "#a2e7f3";
-const SPOT_RADIUS_PX = 80;
 const BACKGROUND_SHAPES_COUNT = 8;
 const BACKGROUND_SHAPES_BASE_SPEED_S = 12;
 const BACKGROUND_SHAPES_SPEED_VARIATION_S = 5;
@@ -113,14 +111,19 @@ type BackgroundShape = {
 };
 
 export default function Home() {
-  const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });
   const [currentStepIndex, moveStep] = useState(0);
   const [fontIndex, setFontIndex] = useState(0);
   const [activeH4, setActiveH4] = useState<string | null>(null);
-  const aboutBackgroundShapes = useMemo<BackgroundShape[]>(() => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
+  const [menuOpen, setMenuStatus] = useState(false);
+
+  const [aboutBackgroundShapes, setAboutBackgroundShapes] = useState<BackgroundShape[]>([]);
+
+  useEffect(() => {
     const shapeKinds: BackgroundShapeKind[] = ["triangle", "circle", "hexagon"];
 
-    return Array.from({ length: BACKGROUND_SHAPES_COUNT * (currentStepIndex + 1) }, (_, index) => {
+    const shapes = Array.from({ length: BACKGROUND_SHAPES_COUNT * (currentStepIndex + 1) }, (_, index) => {
       const size =
         BACKGROUND_SHAPES_MIN_SIZE_PX +
         Math.random() * (BACKGROUND_SHAPES_MAX_SIZE_PX - BACKGROUND_SHAPES_MIN_SIZE_PX);
@@ -134,6 +137,19 @@ export default function Home() {
         opacity: BACKGROUND_SHAPES_OPACITY + Math.random() * 0.12,
         color: BACKGROUND_SHAPES_COLORS[Math.floor(Math.random() * BACKGROUND_SHAPES_COLORS.length)],
       };
+    });
+
+    setAboutBackgroundShapes(shapes);
+  }, [currentStepIndex]);
+
+  useEffect(() => {
+    const section = document.querySelector<HTMLElement>(`[data-step-id="${currentStepIndex}"]`)
+
+    if (!section) return;
+
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: 'start'
     });
   }, [currentStepIndex]);
 
@@ -185,59 +201,66 @@ export default function Home() {
     });
   }
 
-  const spotlightBackground = useMemo(() => {
-    return `radial-gradient(circle ${SPOT_RADIUS_PX}px at ${mousePosition.x}px ${mousePosition.y}px, ${SPOT_COLOR} 0 ${SPOT_RADIUS_PX}px, ${BASE_COLOR} ${SPOT_RADIUS_PX + 1}px)`;
-  }, [mousePosition.x, mousePosition.y]);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    const currentStep = document.querySelector<HTMLElement>(`[data-step-id="${currentStepIndex}"]`)
+    setIsSubmitting(true);
+    setSubmitStatus(null);
 
-    if (!currentStep) return;
-    if (currentStepIndex === 1){
-      const y = currentStep.getBoundingClientRect().top + window.scrollY - 10;
-      window.scrollTo({top: y, behavior:'smooth'});
-      
-      return;
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mzdojdjz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error enviando el formulario:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
     }
-    
-
-    if (!currentStep) return;
-
-    currentStep.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-
-  }, [currentStepIndex]);
+  };
 
   return (
-    <div style={{display:'flex', flexDirection:'column', backgroundColor: '#5977d8'}}>
+    <div className="flex flex-col bg-[#5977d8]">
       <div style={{
       }}
-        className={currentStepIndex > 4 ? "" : "hidden"}>
-        <div onClick= { () => goToSection(0)}>Inicio</div>
-        <div onClick= { () => goToSection(1)}>Sobre Mi</div>
-        <div onClick= { () => goToSection(2)}>Proyectos</div>
-        <div onClick= { () => goToSection(5)}>Contacto</div>
+        className={`${currentStepIndex > 4 ? "" : "hidden"} bg-[white] ${neueHaasBold.className} border-2 border-black select-none text-lg text-black fixed z-20 flex flex-col !ms-5 !mt-5 rounded-xl sm:drop-shadow-[5px_5px_0_black] drop-shadow-[2px_2px_0_black] selection-none hover:drop-shadow-[7px_7px_0_black] shadow-xl transition-all duration-100 ease-in`}>
+        <ArrowCircleDownRightIcon onClick={ () => setMenuStatus(!menuOpen)} className={` ${menuOpen ? 'rotate-180' : ''} sm:size-12 size-8 cursor-pointer sm:!p-2 !p-1 transition-all duration-150 ease-in`}/>
+        <div className={`flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${
+      !menuOpen ? 'max-h-0 max-w-0 opacity-0 gap-0 !p-0' : 'max-h-[300px] max-w-[300px] opacity-100 gap-3 !px-3 !pb-3'
+    }`}>
+        <div onClick= { () => goToSection(0)} className="w-fit cursor-pointer hover:!my-1 hover:text-[#5977d8] border-b-2 border-black hover:border-[#5977d8] hover:text-base sm:text-base text-sm sm:hover:text-xl transition-all duration-100 ease-in">Inicio</div>
+        <div onClick= { () => goToSection(1)} className="w-fit cursor-pointer hover:!my-1 hover:text-[#5977d8] border-b-2 border-black hover:border-[#5977d8] hover:text-base sm:text-base text-sm sm:hover:text-xl transition-all duration-100 ease-in">Sobre Mi</div>
+        <div onClick= { () => goToSection(2)} className="w-fit cursor-pointer hover:!my-1 hover:text-[#5977d8] border-b-2 border-black hover:border-[#5977d8] hover:text-base sm:text-base text-sm sm:hover:text-xl transition-all duration-100 ease-in">Proyectos</div>
+        <div onClick= { () => goToSection(5)} className="w-fit cursor-pointer hover:!my-1 hover:text-[#5977d8] border-b-2 border-black hover:border-[#5977d8] hover:text-base sm:text-base text-sm sm:hover:text-xl transition-all duration-100 ease-in">Contacto</div>
+        </div>
       </div>
       <main
-        onMouseMove={(event) =>
-          setMousePosition({ x: event.clientX, y: event.clientY })
-        }
-        onMouseLeave={() => setMousePosition({ x: -1000, y: -1000 })}
         onClick={() => {
           if (currentStepIndex < 1) moveStep(1);
         }}
-        style={{ background: spotlightBackground }}
         data-step-id='0'
-        className="flex item-center justify-center"
+        className={`flex item-center justify-center ${currentStepIndex > 1 ? '' : 'cursor-pointer'}`}
       >
         <h1 className={`${fonts[fontIndex]} text-center sm:text-9xl text-5xl text-white select-none`}>
             {" "}
             Stefano Biglia{" "}
         </h1>
       </main>
-      <div className={`overflow-hidden relative bg-white rounded-t-xl shadow-2xl !mx-2 !mt-5 ${currentStepIndex > 0 ? "" : "hidden"} ${currentStepIndex > 4 ? "!mb-2 rounded-b-xl" : ""}` } data-step-id='1'>
+      <div className={`overflow-hidden relative bg-white rounded-t-xl shadow-2xl !mx-2 !mt-5 ${currentStepIndex > 0 ? "" : "hidden"} ${currentStepIndex > 4 ? "!mb-2 rounded-b-xl !pb-10" : ""}` } data-step-id='1'>
       <div className="about-bg-shapes" aria-hidden="true">
           {aboutBackgroundShapes.map((shape, index) => (
             <span
@@ -257,7 +280,7 @@ export default function Home() {
           ))}
         </div>
       <section
-        className= {`relative overflow-hidden flex-col items-center flex h-screen min-h-[500px]`}
+        className= {`relative overflow-hidden flex-col items-center flex h-screen min-h-[800px]`}
       >
         <div className={`z-10 flex flex-col md:flex-row-reverse sm:h-full h-fit w-full !py-5 sm:!px-15 !px-5 select-none justify-center items-center gap-5`}>
         <div
@@ -391,7 +414,7 @@ export default function Home() {
         data-step-id='2'
         >     
         <article
-          className="flex justify-center items-center gap-5 h-screen w-full min-h-[500px]"
+          className="flex justify-center items-center gap-5 h-screen w-full min-h-[800px]"
         >
           <div className="flex w-[100%] justify-center gap-15 items-center flex-col lg:flex-row">
             <div>
@@ -421,12 +444,12 @@ export default function Home() {
         </article>
         
         <article
-          className={`${currentStepIndex > 2 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen min-h-[500px] w-full sm:!mt-30`}
+          className={`${currentStepIndex > 2 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen min-h-[700px] w-full sm:!mt-30`}
           data-step-id='3'>
 
           <div className="flex w-[100%] justify-center gap-20 items-center flex-col lg:flex-row-reverse">
             <div>
-            <div className="xl:h-100 relative transition-all duration-200 ease-out"><img src={'/images/musica.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#80B46A] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_#01962e] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
+            <div className="xl:h-130 relative transition-all duration-200 ease-out"><img src={'/images/musica.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#80B46A] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_#01962e] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
             <div className="float-tag float-tag--3 w-full">
             <div className="flex absolute">
             <img src={"images/python.png"} alt='python' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 !ml-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
@@ -447,11 +470,11 @@ export default function Home() {
         </article>
 
         <article
-          className={`${currentStepIndex > 3 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen min-h-[500px] w-full sm:!mt-30`}
+          className={`${currentStepIndex > 3 ? "flex" : "hidden"} flex justify-center items-center gap-5 h-screen min-h-[700px] w-full sm:!mt-30`}
           data-step-id='4'>
           <div className="flex w-[100%] justify-center gap-15 items-center flex-col lg:flex-row">
             <div>
-            <div className="xl:h-100 relative transition-all duration-200 ease-out"><img src={'/images/portfolio.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#5977d8] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_blue] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
+            <div className="2xl:h-110 relative transition-all duration-200 ease-out"><img src={'/images/portfolio.png'} className='float-tag float-tag--3 h-full rounded-xl drop-shadow-[10px_10px_0px_#5977d8] border-1 border-black shadow-xl cursor-pointer hover:drop-shadow-[13px_13px_0px_blue] hover:shadow-2xl transition-all duration-100 ease-in'></img></div>  
             <div className="float-tag float-tag--3 w-full">
             <div className="flex absolute">
             <img src={"images/next.png"} alt='next' className='lg:h-15 sm:h-9 h-5 lg:hover:h-17 sm:hover:h-11 hover:h-7 !my-2 w-auto transition-all duration-200 ease-out cursor-pointer'></img>
@@ -478,12 +501,129 @@ export default function Home() {
       </section>
 
       <section
-        className={`${currentStepIndex > 4 ? "flex" : "hidden"}`}
+        className={`${currentStepIndex > 4 ? "flex" : "hidden"}
+        h-screen min-h-[700px] justify-center items-center md:!mt-25`}
         data-step-id='5'>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', height: '100%', gap: '2rem', marginTop: '15px'}}>
-            <a href="https://www.linkedin.com/in/stefano-biglia-223623275/"><h3>LinkedIn</h3></a>
-            <a href="https://github.com/nanoBiglia2005"><h3>GitHub</h3></a>
+              <div className="isolate !px-6 lg:!px-10">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+      >
+        <div
+          style={{
+            clipPath:
+              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+          }}
+          className="relative left-1/2 -z-10 aspect-1155/678 w-144.5 max-w-none -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-288.75"
+        />
+      </div>
+      <div className="mx-auto max-w-full text-center">
+        <h2 className={`${neueHaasBlack.className} text-4xl tracking-tight text-balance text-black sm:text-5xl`}>Contacto</h2>
+      </div>
+        <form onSubmit={handleSubmit} className="!mx-auto max-w-xl sm:!mt-20">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+          <div>
+            <label htmlFor="first-name" className={`${neueHaasBold.className} block text-sm/6 text-black`}>
+              Nombre
+            </label>
+            <div className="!mt-2.5">
+              <input
+                required
+                id="first-name"
+                name="first-name"
+                type="text"
+                autoComplete="given-name"
+                className="block w-full rounded-md bg-white !px-3.5 !py-2 text-base text-black outline-2 -outline-offset-1 outline-black placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600"
+              />
             </div>
+          </div>
+          <div>
+            <label htmlFor="last-name" className={`${neueHaasBold.className} block text-sm/6 font-semibold text-black`}>
+              Apellido
+            </label>
+            <div className="!mt-2.5">
+              <input
+                required
+                id="last-name"
+                name="last-name"
+                type="text"
+                autoComplete="family-name"
+                className="block w-full rounded-md bg-white !px-3.5 !py-2 text-base text-black outline-2 -outline-offset-1 outline-black placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600"
+              />
+            </div>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="email" className={`${neueHaasBold.className} block text-sm/6 font-semibold text-black`}>
+              Email
+            </label>
+            <div className="!mt-2.5">
+              <input
+                required
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                className="block w-full rounded-md bg-white !px-3.5 !py-2 text-base text-black outline-2 -outline-offset-1 outline-black placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600"
+              />
+            </div>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="phone-number" className={`${neueHaasBold.className} block text-sm/6 font-semibold text-black`}>
+              Telefono
+            </label>
+            <div className="!mt-2.5">
+              <div className="flex rounded-md bg-white outline-2 -outline-offset-1 outline-black has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-blue-600">
+                <input
+                  id="phone-number"
+                  name="phone-number"
+                  type="text"
+                  placeholder="+54 11 1234-5678"
+                  className="block min-w-0 grow !px-3.5 !py-1.5 text-base text-black focus:outline-none sm:text-sm/6"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="message" className={`${neueHaasBold.className} block text-sm/6 text-black`}>
+              Mensaje
+            </label>
+            <div className="!mt-2.5">
+              <textarea
+                required
+                id="message"
+                name="message"
+                rows={4}
+                className="block w-full rounded-md bg-white !px-3.5 !py-2 text-base text-black outline-2 -outline-offset-1 outline-black placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600"
+                defaultValue={''}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="!mt-10">
+          <button
+            type="submit"
+            disabled={isSubmitting || submitStatus === 'success'}
+            className={`${neueHaasBold.className} block w-full rounded-md ${isSubmitting  ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-500'} disabled:bg-gray-400 disabled:cursor-not-allowed !px-3.5 !py-2.5 text-center text-sm text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-colors duration-200`}
+          >
+            {isSubmitting ? "Enviando..." : "Enviar"}
+          </button>
+          {submitStatus === 'success' && (
+            <p className="mt-4 text-center text-sm text-green-600 font-semibold">
+              ¡Mensaje enviado con éxito! Te responderé pronto.
+            </p>
+          )}
+          {submitStatus === 'error' && (
+            <p className="mt-4 text-center text-sm text-red-600 font-semibold">
+              Hubo un error al enviar el mensaje. Por favor, intentá de nuevo.
+            </p>
+          )}
+        </div>
+      </form>
+      <div className="flex justify-between w-full !mt-2">
+          <a href="https://github.com/nanoBiglia2005" target="_blank" rel="noopener noreferrer"><img src={'images/github.png'} className="md:h-10 h-7 hover:h-8 md:hover:h-11 transition-all duration-100 ease-in"/></a>
+          <a href="https://www.linkedin.com/in/stefano-biglia-223623275/" target="_blank" rel="noopener noreferrer"><img src={'images/linkedin.webp'} className="md:h-10 h-7 hover:h-8 md:hover:h-11 transition-all duration-100 ease-in"/></a>
+      </div>
+    </div>
       </section>
       </div>
     </div>
